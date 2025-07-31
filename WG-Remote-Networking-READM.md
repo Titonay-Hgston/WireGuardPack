@@ -25,8 +25,8 @@
 
 1. 下载脚本并赋予执行权限：
    ```bash
-   wget https://example.com/wg-manager.sh
-   chmod +x wg-manager.sh
+   git clone https://github.com/Titonay-Hgston/WireGuardPack
+   bash WireGuardPack/WG-Remote-Networking.sh
    ```
 
 2. 运行脚本（首次运行会自动安装依赖）：
