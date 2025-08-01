@@ -31,7 +31,7 @@
 
 2. 运行脚本（首次运行会自动安装依赖）：
    ```bash
-   ./wg-manager.sh [选项] [参数]
+   bash WireGuardPack/WG-Remote-Networking.sh [选项] [参数]
    ```
 
 ## 命令参数
@@ -47,19 +47,19 @@
 
 ```bash
 # 添加客户端（自动分配IP）
-./wg-manager.sh -a laptop
+bash WireGuardPack/WG-Remote-Networking.sh -a laptop
 
 # 添加客户端（指定IP）
-./wg-manager.sh -a phone 10.8.0.10
+bash WireGuardPack/WG-Remote-Networking.sh -a phone 10.8.0.10
 
 # 删除客户端
-./wg-manager.sh -d laptop
+bash WireGuardPack/WG-Remote-Networking.sh -d laptop
 
 # 显示帮助
-./wg-manager.sh -h
+bash WireGuardPack/WG-Remote-Networking.sh -h
 
 # 完全卸载WireGuard
-./wg-manager.sh --uninstall
+bash WireGuardPack/WG-Remote-Networking.sh --uninstall
 ```
 
 ## 配置说明
