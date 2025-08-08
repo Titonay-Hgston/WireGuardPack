@@ -20,7 +20,7 @@ FIRST_RUN_FILE="$WG_DIR/.first_run"
 CONFIG_FILE="$WG_DIR/$INTERFACE.conf"
 
 # 功能配置
-DNS_SERVERS="1.1.1.1, 8.8.8.8"  # 客户端DNS服务器，多个用逗号分隔
+DNS_SERVERS="1.1.1.1, 8.8.8.8"  # 客户端DNS服务器，多个用逗号分隔，选择性使用
 KEEPALIVE_INTERVAL="25"         # 保活间隔（秒）
 IP_RANGE_START="2"              # IP地址分配起始值
 IP_RANGE_END="254"              # IP地址分配结束值
@@ -194,7 +194,6 @@ EOF
 [Interface]
 PrivateKey = $client_private_key
 Address = $client_ip/$SUBNET_MASK
-DNS = $DNS_SERVERS
 
 [Peer]
 PublicKey = $server_public_key
