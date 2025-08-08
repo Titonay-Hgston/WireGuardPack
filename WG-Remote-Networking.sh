@@ -92,6 +92,47 @@ install_package() {
     fi
 }
 
+# 检查并开启IP转发（关键新增功能）
+check_and_enable_ip_forward() {
+    local ip_forward_path="/proc/sys/net/ipv4/ip_forward"
+    local current_value=$(cat "$ip_forward_path")
+
+    # 临时开启（立即生效）
+    if [[ "$current_value" -ne 1 ]]; then
+        print_info "检测到 IP 转发未开启，正在临时启用..."
+        echo 1 > "$ip_forward_path"
+        if [[ $(cat "$ip_forward_path") -eq 1 ]]; then
+            print_success "IP 转发临时启用成功"
+        else
+            print_error "IP 转发临时启用失败，请手动检查"
+            exit 1
+        fi
+    else
+        print_info "IP 转发已临时开启"
+    fi
+
+    # 永久开启（重启后生效）
+    local sysctl_conf="/etc/sysctl.conf"
+    # 检查配置文件中是否已存在正确配置
+    if ! grep -q "^net\.ipv4\.ip_forward = 1" "$sysctl_conf"; then
+        print_info "正在配置 IP 转发永久生效..."
+        # 先注释掉已有无效配置（如果存在）
+        sed -i 's/^net\.ipv4\.ip_forward.*/# &/' "$sysctl_conf"
+        # 添加正确配置
+        echo "net.ipv4.ip_forward = 1" >> "$sysctl_conf"
+        # 生效配置
+        sysctl -p >/dev/null 2>&1
+        if grep -q "^net\.ipv4\.ip_forward = 1" "$sysctl_conf"; then
+            print_success "IP 转发已配置为永久生效"
+        else
+            print_error "IP 转发永久配置失败，请手动编辑 $sysctl_conf"
+            exit 1
+        fi
+    else
+        print_info "IP 转发已配置为永久生效"
+    fi
+}
+
 # 首次运行安装依赖
 first_run_setup() {
     if [[ ! -f "$FIRST_RUN_FILE" ]]; then
@@ -287,6 +328,7 @@ show_help() {
 main() {
     check_root
     first_run_setup  # 首次运行检查依赖
+    check_and_enable_ip_forward  # 检查并开启IP转发（新增调用）
     
     case "$1" in
         -a|--add)
